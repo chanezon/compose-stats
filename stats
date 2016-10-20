@@ -1,0 +1,15 @@
+#!/bin/bash
+function total() {
+    RES=$(curl -s -H "Authorization: token $OAUTH_TOKEN" https://api.github.com/search/code?q=filename:docker-compose+language:yml |jq .total_count)
+    echo Total $RES
+}
+function search() {
+    DIRECTIVE=$1
+    RES=$(curl -s -H "Authorization: token $OAUTH_TOKEN" https://api.github.com/search/code?q=$DIRECTIVE+in:file+filename:docker-compose+language:yml |jq .total_count)
+    echo $DIRECTIVE $RES
+}
+total
+for i in $( cat $1 ); do
+    search $i
+done
+
